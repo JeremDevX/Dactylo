@@ -7,6 +7,7 @@ const wpmDisplay = document.createElement("div");
 wpmDisplay.textContent = "M/Mins: 0";
 document.body.appendChild(wpmDisplay);
 let correctWords = 0;
+let globalWordsPerMinutes;
 
 let intervalTimer = setInterval(() => {
   const timeElapsedSeconds = (Date.now() - startTime) / 1000;
@@ -14,7 +15,7 @@ let intervalTimer = setInterval(() => {
 
   const elapsedTimeInMinutes = timeElapsedSeconds / 60;
   const wordsPerMinutes = correctWords / elapsedTimeInMinutes;
-
+  globalWordsPerMinutes = wordsPerMinutes.toFixed(1);
   wpmDisplay.textContent = `M/Mins : ${wordsPerMinutes.toFixed(1)}`;
 }, 100);
 
@@ -53,7 +54,7 @@ showRandomWords(randomWords);
 
 let error = 0;
 let errorNumber = document.createElement("div");
-errorNumber.innerText = "Number of errors : " + error;
+errorNumber.innerText = "Nombre d'erreurs : " + error;
 document.body.appendChild(errorNumber);
 
 const userInput = document.getElementById("word-user");
@@ -92,6 +93,26 @@ userInput.addEventListener("keypress", (event) => {
     if (i === 10) {
       clearInterval(intervalTimer);
       userInput.disabled = true;
+      let scoreToStore = displayScore();
+      storeScore(scoreToStore);
     }
   }
 });
+
+function displayScore() {
+  let score =
+    "Score : Mots/mins : " +
+    globalWordsPerMinutes +
+    ", nombre d'erreurs : " +
+    error;
+  const scoreDisplay = document.createElement("div");
+  scoreDisplay.textContent = score;
+  document.body.appendChild(scoreDisplay);
+  return score;
+}
+
+function storeScore(scoreToStore) {
+  localStorage.setItem("Score n°1", scoreToStore);
+  let savedScore = localStorage.getItem("Score n°1");
+  console.log(savedScore);
+}

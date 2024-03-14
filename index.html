@@ -4,7 +4,23 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dactylo</title>
-    <script src="script.js"></script>
+    <script type="module" src="script.js"></script>
+    <script type="module" src="wordsList.js"></script>
   </head>
-  <body></body>
+  <body>
+    <main>
+      <audio
+        id="errorSound"
+        src="audio/training-program-incorrect2-88735.mp3"
+        preload="auto"
+      ></audio>
+      <audio
+        id="validSound"
+        src="audio/correct-2-46134.mp3"
+        preload="auto"
+      ></audio>
+      <div class="words-container"></div>
+      <input type="text" id="word-user" name="word" autocomplete="off" />
+    </main>
+  </body>
 </html>

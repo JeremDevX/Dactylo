@@ -69,7 +69,7 @@ function showRandomWords(randomWords) {
 
 showRandomWords(randomWords);
 
-function resetShuffleAndReplay() {
+export function resetShuffleAndReplay() {
   i = 0;
   error = 0;
   document.querySelector(".words-container").innerHTML = "";
@@ -82,7 +82,8 @@ function resetShuffleAndReplay() {
   userInput.placeholder = "";
 }
 
-document.querySelector("#replay").addEventListener("click", (event) => {
+document.querySelector("#replay").addEventListener("click", () => {
+  userInput.removeEventListener;
   resetShuffleAndReplay();
 });
 
@@ -174,7 +175,6 @@ function storeScore(scoreToStore) {
 function displayScoreboard() {
   let scores = JSON.parse(localStorage.getItem("Scores")) || [];
   let tableBody = document.querySelector(".scoreboard-table table tbody");
-  console.table(scores);
 
   if (!tableBody) {
     tableBody = document.createElement("tbody");

@@ -30,3 +30,26 @@ body {
     color: white;
   }
 }
+
+.scoreboard-table {
+  margin-top: 150px;
+  border: 1px solid black;
+  table {
+    border-collapse: collapse;
+  }
+  caption {
+    margin: 10px;
+    font-weight: bolder;
+    font-size: larger;
+  }
+  tr,
+  thead,
+  tbody,
+  th,
+  td {
+    border: 1px solid black;
+  }
+  th {
+    padding: 10px;
+  }
+}

@@ -1,11 +1,13 @@
 import { allWords } from "./wordsList.js";
 
+const scoreDiv = document.querySelector(".actual-score");
 const startTime = Date.now();
 const timer = document.createElement("div");
 timer.textContent = "0";
 const wpmDisplay = document.createElement("div");
+scoreDiv.appendChild(timer);
 wpmDisplay.textContent = "M/Mins: 0";
-document.body.appendChild(wpmDisplay);
+scoreDiv.appendChild(wpmDisplay);
 let correctWords = 0;
 let globalWordsPerMinutes;
 
@@ -18,8 +20,6 @@ let intervalTimer = setInterval(() => {
   globalWordsPerMinutes = wordsPerMinutes.toFixed(1);
   wpmDisplay.textContent = `M/Mins : ${wordsPerMinutes.toFixed(1)}`;
 }, 100);
-
-document.body.appendChild(timer);
 
 const shuffle = (array) => {
   const copy = [...array];
@@ -60,11 +60,13 @@ function playSound(sound) {
 let error = 0;
 let errorNumber = document.createElement("div");
 errorNumber.innerText = "Nombre d'erreur : " + error;
-document.body.appendChild(errorNumber);
+scoreDiv.appendChild(errorNumber);
 
 const userInput = document.getElementById("word-user");
 userInput.focus();
 let i = 0;
+
+let userName = "";
 
 const firstWord = document.querySelector(`#word0`);
 firstWord.style.color = "blue";
@@ -106,6 +108,7 @@ userInput.addEventListener("keypress", (event) => {
       wpmDisplay.textContent = `M/Mins : ${globalWordsPerMinutes}`;
       userInput.disabled = true;
       userInput.placeholder = "Fini !";
+      userName = prompt("Nom du joueur :");
       let scoreToStore = displayScore();
       storeScore(scoreToStore);
       displayScoreboard();
@@ -115,43 +118,46 @@ userInput.addEventListener("keypress", (event) => {
 
 function displayScore() {
   let pointsFinaux = globalWordsPerMinutes * 10 - error * 5;
-  let score =
-    "Score : Mots/mins : " +
-    globalWordsPerMinutes +
-    ", nombre d'erreurs : " +
-    error +
-    " Score total = " +
-    pointsFinaux;
+  let score = new Object();
+  score.user = userName;
+  score.wpm = globalWordsPerMinutes;
+  score.nberror = error;
+  score.fs = pointsFinaux;
   return score;
 }
 
 function storeScore(scoreToStore) {
   let scores = JSON.parse(localStorage.getItem("Scores")) || [];
-  console.log(scores[0]);
   scores.unshift(scoreToStore);
-
-  scores = scores.slice(0, 5);
-
+  if (scores.length > 5) {
+    scores.pop();
+  }
   localStorage.setItem("Scores", JSON.stringify(scores));
 }
 
 function displayScoreboard() {
   let scores = JSON.parse(localStorage.getItem("Scores")) || [];
-  let scoreboard = document.getElementById("scoreboard");
+  let tableBody = document.querySelector(".scoreboard-table table tbody");
   console.table(scores);
 
-  if (!scoreboard) {
-    scoreboard = document.createElement("div");
-    scoreboard.id = "scoreboard";
-    document.body.appendChild(scoreboard);
+  if (!tableBody) {
+    tableBody = document.createElement("tbody");
+    document.querySelector(".scoreboard-table table").appendChild(tableBody);
+  } else {
+    tableBody.innerHTML = "";
   }
 
-  scoreboard.innerHTML = "<h3>Scoreboard</h3>";
-
   scores.forEach((score, index) => {
-    let scoreElement = document.createElement("div");
-    scoreElement.textContent = `#${index + 1}: ${score}`;
-    scoreboard.appendChild(scoreElement);
+    let row = tableBody.insertRow();
+    let cellOne = row.insertCell(0);
+    let cellTwo = row.insertCell(1);
+    let cellThree = row.insertCell(2);
+    let cellFour = row.insertCell(3);
+
+    cellOne.textContent = score.user;
+    cellTwo.textContent = score.wpm;
+    cellThree.textContent = score.nberror;
+    cellFour.textContent = score.fs;
   });
 }
 

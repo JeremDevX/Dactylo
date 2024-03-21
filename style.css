@@ -30,4 +30,27 @@ body {
 }
 #word-user::placeholder {
   color: white;
+}
+
+.scoreboard-table {
+  margin-top: 150px;
+  border: 1px solid black;
+}
+.scoreboard-table table {
+  border-collapse: collapse;
+}
+.scoreboard-table caption {
+  margin: 10px;
+  font-weight: bolder;
+  font-size: larger;
+}
+.scoreboard-table tr,
+.scoreboard-table thead,
+.scoreboard-table tbody,
+.scoreboard-table th,
+.scoreboard-table td {
+  border: 1px solid black;
+}
+.scoreboard-table th {
+  padding: 10px;
 }/*# sourceMappingURL=style.css.map */

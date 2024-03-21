@@ -128,13 +128,10 @@ function displayScore() {
 function storeScore(scoreToStore) {
   let scores = JSON.parse(localStorage.getItem("Scores")) || [];
   console.log(scores[0]);
-  // Add the new score to the beginning of the array
   scores.unshift(scoreToStore);
 
-  // Ensure only the last five scores are kept
   scores = scores.slice(0, 5);
 
-  // Save the updated scores array back to localStorage
   localStorage.setItem("Scores", JSON.stringify(scores));
 }
 
@@ -143,17 +140,14 @@ function displayScoreboard() {
   let scoreboard = document.getElementById("scoreboard");
   console.table(scores);
 
-  // If the scoreboard does not exist, create it
   if (!scoreboard) {
     scoreboard = document.createElement("div");
     scoreboard.id = "scoreboard";
     document.body.appendChild(scoreboard);
   }
 
-  // Clear the existing scoreboard content
   scoreboard.innerHTML = "<h3>Scoreboard</h3>";
 
-  // Add each score to the scoreboard
   scores.forEach((score, index) => {
     let scoreElement = document.createElement("div");
     scoreElement.textContent = `#${index + 1}: ${score}`;

@@ -1,7 +1,7 @@
 import { allWords } from "./wordsList.js";
 
 const scoreDiv = document.querySelector(".actual-score");
-const startTime = Date.now();
+let startTime = Date.now();
 const timer = document.createElement("div");
 timer.textContent = "0";
 const wpmDisplay = document.createElement("div");
@@ -21,6 +21,23 @@ let intervalTimer = setInterval(() => {
   wpmDisplay.textContent = `M/Mins : ${wordsPerMinutes.toFixed(1)}`;
 }, 100);
 
+function resetTimer() {
+  clearInterval(intervalTimer);
+  startTime = Date.now();
+  correctWords = 0;
+  globalWordsPerMinutes = 0;
+  timer.textContent = "Temps écoulé : 0s";
+  wpmDisplay.textContent = "M/Mins : 0";
+  intervalTimer = setInterval(() => {
+    const timeElapsedSeconds = (Date.now() - startTime) / 1000;
+    timer.textContent = "Temps écoulé : " + timeElapsedSeconds.toFixed(1) + "s";
+    const elapsedTimeInMinutes = timeElapsedSeconds / 60;
+    const wordsPerMinutes = correctWords / elapsedTimeInMinutes;
+    globalWordsPerMinutes = wordsPerMinutes.toFixed(1);
+    wpmDisplay.textContent = `M/Mins : ${wordsPerMinutes.toFixed(1)}`;
+  }, 100);
+}
+
 const shuffle = (array) => {
   const copy = [...array];
   copy.sort(() => Math.random() - 0.5);
@@ -38,7 +55,7 @@ function shuffleWords(allWords) {
   return tenRandomWords;
 }
 
-const randomWords = shuffleWords(allWords);
+let randomWords = shuffleWords(allWords);
 
 function showRandomWords(randomWords) {
   const addWords = document.querySelector(".words-container");
@@ -52,6 +69,23 @@ function showRandomWords(randomWords) {
 
 showRandomWords(randomWords);
 
+function resetShuffleAndReplay() {
+  i = 0;
+  error = 0;
+  document.querySelector(".words-container").innerHTML = "";
+  randomWords = shuffleWords(allWords);
+  showRandomWords(randomWords);
+  resetTimer();
+  lightenFirstWord();
+  userInput.disabled = false;
+  userInput.focus();
+  userInput.placeholder = "";
+}
+
+document.querySelector("#replay").addEventListener("click", (event) => {
+  resetShuffleAndReplay();
+});
+
 function playSound(sound) {
   sound.pause();
   sound.currentTime = 0;
@@ -62,16 +96,18 @@ let errorNumber = document.createElement("div");
 errorNumber.innerText = "Nombre d'erreur : " + error;
 scoreDiv.appendChild(errorNumber);
 
+function lightenFirstWord() {
+  const firstWord = document.querySelector(`#word0`);
+  firstWord.style.color = "blue";
+  firstWord.style.fontWeight = "bold";
+}
+
 const userInput = document.getElementById("word-user");
 userInput.focus();
-let i = 0;
-
 let userName = "";
 
-const firstWord = document.querySelector(`#word0`);
-firstWord.style.color = "blue";
-firstWord.style.fontWeight = "bold";
-
+let i = 0;
+lightenFirstWord();
 userInput.addEventListener("keypress", (event) => {
   if (event.code === "Enter" || event.code === "Space") {
     const wordElement = document.querySelector(`#word${i}`);
@@ -117,7 +153,7 @@ userInput.addEventListener("keypress", (event) => {
 });
 
 function displayScore() {
-  let pointsFinaux = globalWordsPerMinutes * 10 - error * 5;
+  let pointsFinaux = (globalWordsPerMinutes * 10 - error * 5) / 10;
   let score = new Object();
   score.user = userName;
   score.wpm = globalWordsPerMinutes;

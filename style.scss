@@ -1,0 +1,32 @@
+body {
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  margin: auto;
+  max-width: 1440px;
+  font-size: 1.5em;
+
+  background-color: cornsilk;
+}
+
+.words-container {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+#word-user {
+  background-color: lightgreen;
+  text-align: center;
+  font-size: 1.5em;
+  width: 500px;
+  &:disabled {
+    background-color: grey;
+  }
+  &::placeholder {
+    color: white;
+  }
+}

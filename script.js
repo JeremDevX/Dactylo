@@ -52,9 +52,14 @@ function showRandomWords(randomWords) {
 
 showRandomWords(randomWords);
 
+function playSound(sound) {
+  sound.pause();
+  sound.currentTime = 0;
+  sound.play();
+}
 let error = 0;
 let errorNumber = document.createElement("div");
-errorNumber.innerText = "Nombre d'erreurs : " + error;
+errorNumber.innerText = "Nombre d'erreur : " + error;
 document.body.appendChild(errorNumber);
 
 const userInput = document.getElementById("word-user");
@@ -63,56 +68,97 @@ let i = 0;
 
 const firstWord = document.querySelector(`#word0`);
 firstWord.style.color = "blue";
+firstWord.style.fontWeight = "bold";
 
 userInput.addEventListener("keypress", (event) => {
-  if (event.code === "Enter") {
+  if (event.code === "Enter" || event.code === "Space") {
     const wordElement = document.querySelector(`#word${i}`);
+    const errorSound = document.getElementById("errorSound");
+    const validSound = document.getElementById("validSound");
+    if (event.code === "Space") {
+      event.preventDefault();
+    }
     if (userInput.value === wordElement.textContent) {
       wordElement.style.color = "green";
       wordElement.style.textDecoration = "line-through";
-      const validSound = document.getElementById("validSound");
-      validSound.pause();
-      validSound.currentTime = 0;
-      validSound.play();
+      wordElement.style.fontWeight = "normal";
+      playSound(validSound);
       i++;
       correctWords++;
       if (i < 10) {
         const highlightedWord = document.querySelector(`#word${i}`);
         highlightedWord.style.color = "blue";
+        highlightedWord.style.fontWeight = "bold";
       }
     } else {
       wordElement.style.color = "red";
       error++;
-      errorNumber.innerText = "Nombre d'erreurs : " + error;
-      const errorSound = document.getElementById("errorSound");
-      errorSound.pause();
-      errorSound.currentTime = 0;
-      errorSound.play();
+      errorNumber.innerText = "Nombre d'erreur(s) : " + error;
+      playSound(errorSound);
+      userInput.value = null;
     }
-    userInput.value = "";
+    userInput.value = null;
     if (i === 10) {
       clearInterval(intervalTimer);
+      const timeElapsedSeconds = (Date.now() - startTime) / 1000;
+      const elapsedTimeInMinutes = timeElapsedSeconds / 60;
+      globalWordsPerMinutes = (correctWords / elapsedTimeInMinutes).toFixed(1);
+      wpmDisplay.textContent = `M/Mins : ${globalWordsPerMinutes}`;
       userInput.disabled = true;
+      userInput.placeholder = "Fini !";
       let scoreToStore = displayScore();
       storeScore(scoreToStore);
+      displayScoreboard();
     }
   }
 });
 
 function displayScore() {
+  let pointsFinaux = globalWordsPerMinutes * 10 - error * 5;
   let score =
     "Score : Mots/mins : " +
     globalWordsPerMinutes +
     ", nombre d'erreurs : " +
-    error;
-  const scoreDisplay = document.createElement("div");
-  scoreDisplay.textContent = score;
-  document.body.appendChild(scoreDisplay);
+    error +
+    " Score total = " +
+    pointsFinaux;
   return score;
 }
 
 function storeScore(scoreToStore) {
-  localStorage.setItem("Score n°1", scoreToStore);
-  let savedScore = localStorage.getItem("Score n°1");
-  console.log(savedScore);
+  let scores = JSON.parse(localStorage.getItem("Scores")) || [];
+  console.log(scores[0]);
+  // Add the new score to the beginning of the array
+  scores.unshift(scoreToStore);
+
+  // Ensure only the last five scores are kept
+  scores = scores.slice(0, 5);
+
+  // Save the updated scores array back to localStorage
+  localStorage.setItem("Scores", JSON.stringify(scores));
 }
+
+function displayScoreboard() {
+  let scores = JSON.parse(localStorage.getItem("Scores")) || [];
+  let scoreboard = document.getElementById("scoreboard");
+  console.table(scores);
+
+  // If the scoreboard does not exist, create it
+  if (!scoreboard) {
+    scoreboard = document.createElement("div");
+    scoreboard.id = "scoreboard";
+    document.body.appendChild(scoreboard);
+  }
+
+  // Clear the existing scoreboard content
+  scoreboard.innerHTML = "<h3>Scoreboard</h3>";
+
+  // Add each score to the scoreboard
+  scores.forEach((score, index) => {
+    let scoreElement = document.createElement("div");
+    scoreElement.textContent = `#${index + 1}: ${score}`;
+    scoreboard.appendChild(scoreElement);
+  });
+}
+
+document.addEventListener("DOMContentLoaded", displayScoreboard);

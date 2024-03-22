@@ -80,6 +80,8 @@ export function resetShuffleAndReplay() {
   userInput.disabled = false;
   userInput.focus();
   userInput.placeholder = "";
+  userInput.value = "";
+  errorNumber.innerText = "Nombre d'erreur : " + error;
 }
 
 document.querySelector("#replay").addEventListener("click", () => {
@@ -110,7 +112,7 @@ let userName = "";
 let i = 0;
 lightenFirstWord();
 userInput.addEventListener("keypress", (event) => {
-  if (event.code === "Enter" || event.code === "Space") {
+  if (event.code === "Enter") {
     const wordElement = document.querySelector(`#word${i}`);
     const errorSound = document.getElementById("errorSound");
     const validSound = document.getElementById("validSound");

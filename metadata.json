@@ -1,0 +1,6 @@
+{
+  "description": {
+    "fr": "<h2>Jeu de dactylographie</h2> <h3>Description</h3> <p>Un jeu de frappe au clavier (dactylo) développé en JavaScript pur, avec sélection de la difficulté, permettant d’améliorer sa vitesse de saisie tout en s’amusant.</p>\n<h3>Fonctionnalités principales :</h3>\n<ul>\n<li>Sélection du niveau de difficulté (facile, moyen, difficile)</li>\n<li>Chronométrage et calcul dynamique de la vitesse de frappe</li>\n<li>Interface simple</li>\n\n</ul>\n<h3>Technologies utilisées :</h3>\n<ul>\n<li>JavaScript</li>\n<li>CSS</li>\n\n</ul>",
+    "en": "<h2>Typing Speed Game</h2>\n<h3>Description</h3> <p>A typing speed game built entirely in vanilla JavaScript, featuring selectable difficulty levels to help users practice and improve typing skills in an entertaining way.</p>\n<h3>Key features:</h3>\n<ul>\n<li>Difficulty level selection (easy, medium, hard)</li>\n<li>Real-time timer and dynamic WPM (words per minute) calculation</li>\n<li>Simple interface</li>\n</ul>\n<h3>Built with :</h3>\n<ul>\n<li>JavaScript</li>\n<li>CSS</li>\n\n</ul>"
+  }
+}
